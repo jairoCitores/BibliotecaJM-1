@@ -1,6 +1,6 @@
 ﻿USE [master]
 GO
-/****** Object:  Database [BibliotecaJM]    Script Date: 27/01/2019 13:33:29 ******/
+/****** Object:  Database [BibliotecaJM]    Script Date: 05/02/2020 0:31:41 ******/
 CREATE DATABASE [BibliotecaJM]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -87,24 +87,24 @@ ALTER DATABASE SCOPED CONFIGURATION SET QUERY_OPTIMIZER_HOTFIXES = OFF;
 GO
 USE [BibliotecaJM]
 GO
-/****** Object:  Table [dbo].[libros]    Script Date: 27/01/2019 13:33:29 ******/
+/****** Object:  Table [dbo].[libros]    Script Date: 05/02/2020 0:31:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[libros](
 	[id_lib] [int] IDENTITY(1,1) NOT NULL,
-	[titulo_lib] [nchar](50) NULL,
-	[autor_lib] [nchar](50) NULL,
+	[titulo_lib] [nvarchar](50) NULL,
+	[autor_lib] [nvarchar](50) NULL,
 	[seccion_lib] [int] NULL,
-	[prestado_sn_lib] [nchar](50) NULL,
+	[prestado_sn_lib] [nchar](1) NULL,
  CONSTRAINT [PK_libros] PRIMARY KEY CLUSTERED 
 (
 	[id_lib] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[prestamos]    Script Date: 27/01/2019 13:33:29 ******/
+/****** Object:  Table [dbo].[prestamos]    Script Date: 05/02/2020 0:31:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -122,7 +122,7 @@ CREATE TABLE [dbo].[prestamos](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[LibrosPrestados]    Script Date: 27/01/2019 13:33:29 ******/
+/****** Object:  View [dbo].[LibrosPrestados]    Script Date: 05/02/2020 0:31:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -133,20 +133,25 @@ SELECT        dbo.libros.id_lib, dbo.libros.titulo_lib, dbo.prestamos.fecha_pres
 FROM            dbo.libros INNER JOIN
                          dbo.prestamos ON dbo.libros.id_lib = dbo.prestamos.id_lib_pre
 GO
-/****** Object:  Table [dbo].[configuracion]    Script Date: 27/01/2019 13:33:29 ******/
+/****** Object:  Table [dbo].[configuracion]    Script Date: 05/02/2020 0:31:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[configuracion](
-	[nombre_biblioteca_cnf] [nchar](50) NULL,
-	[direccion_cnf] [nchar](50) NULL,
+	[id_cnf] [int] IDENTITY(1,1) NOT NULL,
+	[nombre_biblioteca_cnf] [nvarchar](50) NULL,
+	[direccion_cnf] [nvarchar](50) NULL,
 	[provincia_cnf] [int] NULL,
 	[dias_prestamo_cnf] [int] NOT NULL,
-	[dias_penalizacion_cnf] [int] NOT NULL
+	[dias_penalizacion_cnf] [int] NOT NULL,
+ CONSTRAINT [PK_configuracion] PRIMARY KEY CLUSTERED 
+(
+	[id_cnf] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[historico_prestamos]    Script Date: 27/01/2019 13:33:29 ******/
+/****** Object:  Table [dbo].[historico_prestamos]    Script Date: 05/02/2020 0:31:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -164,17 +169,17 @@ CREATE TABLE [dbo].[historico_prestamos](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[lectores]    Script Date: 27/01/2019 13:33:30 ******/
+/****** Object:  Table [dbo].[lectores]    Script Date: 05/02/2020 0:31:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[lectores](
 	[id_lec] [int] IDENTITY(1,1) NOT NULL,
-	[nombre_lec] [nchar](50) NULL,
-	[domicilio_lec] [nchar](50) NULL,
+	[nombre_lec] [nvarchar](50) NULL,
+	[domicilio_lec] [nvarchar](50) NULL,
 	[provincia_lec] [int] NULL,
-	[email_lec] [nchar](50) NULL,
+	[email_lec] [nvarchar](50) NULL,
 	[fecha_nacimiento_lec] [date] NULL,
 	[fecha_penalizacion_lec] [datetime] NULL,
  CONSTRAINT [PK_lectores] PRIMARY KEY CLUSTERED 
@@ -183,50 +188,53 @@ CREATE TABLE [dbo].[lectores](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[provincias]    Script Date: 27/01/2019 13:33:30 ******/
+/****** Object:  Table [dbo].[provincias]    Script Date: 05/02/2020 0:31:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[provincias](
 	[id_pro] [int] NOT NULL,
-	[provincia_pro] [nchar](50) NULL,
+	[provincia_pro] [nvarchar](50) NULL,
  CONSTRAINT [PK_provincias] PRIMARY KEY CLUSTERED 
 (
 	[id_pro] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[secciones]    Script Date: 27/01/2019 13:33:30 ******/
+/****** Object:  Table [dbo].[secciones]    Script Date: 05/02/2020 0:31:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[secciones](
 	[id_sec] [int] NOT NULL,
-	[seccion_sec] [nchar](50) NULL,
+	[seccion_sec] [nvarchar](50) NULL,
  CONSTRAINT [PK_secciones] PRIMARY KEY CLUSTERED 
 (
 	[id_sec] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[usuarios]    Script Date: 27/01/2019 13:33:30 ******/
+/****** Object:  Table [dbo].[usuarios]    Script Date: 05/02/2020 0:31:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[usuarios](
-	[nombre_usu] [nchar](20) NOT NULL,
-	[password_usu] [nchar](20) NOT NULL,
-	[tipo_usu] [char](1) NOT NULL,
+	[nombre_usu] [nvarchar](20) NOT NULL,
+	[password_usu] [nvarchar](20) NOT NULL,
+	[tipo_usu] [nchar](1) NOT NULL,
  CONSTRAINT [PK_usuarios_1] PRIMARY KEY CLUSTERED 
 (
 	[nombre_usu] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-INSERT [dbo].[configuracion] ([nombre_biblioteca_cnf], [direccion_cnf], [provincia_cnf], [dias_prestamo_cnf], [dias_penalizacion_cnf]) VALUES (N'IES Julián Marías                                 ', N'C/Eusebio González Suárez, sn                     ', 47, 10, 10)
+SET IDENTITY_INSERT [dbo].[configuracion] ON 
+
+INSERT [dbo].[configuracion] ([id_cnf], [nombre_biblioteca_cnf], [direccion_cnf], [provincia_cnf], [dias_prestamo_cnf], [dias_penalizacion_cnf]) VALUES (1, N'IES Julián Marías                               ', N'C/Eusebio González Suárez, sn                     ', 47, 10, 10)
+SET IDENTITY_INSERT [dbo].[configuracion] OFF
 INSERT [dbo].[historico_prestamos] ([id_lec_his], [id_lib_his], [fecha_presta_his], [fecha_devol_his]) VALUES (1, 1, CAST(N'2010-08-25T12:03:47.000' AS DateTime), CAST(N'2010-08-28T03:57:31.000' AS DateTime))
 INSERT [dbo].[historico_prestamos] ([id_lec_his], [id_lib_his], [fecha_presta_his], [fecha_devol_his]) VALUES (1, 2, CAST(N'2018-02-01T13:20:00.000' AS DateTime), CAST(N'2018-02-10T10:20:00.000' AS DateTime))
 INSERT [dbo].[historico_prestamos] ([id_lec_his], [id_lib_his], [fecha_presta_his], [fecha_devol_his]) VALUES (1, 9, CAST(N'2008-08-25T16:44:35.000' AS DateTime), CAST(N'2008-09-02T22:36:01.000' AS DateTime))
@@ -346,36 +354,36 @@ INSERT [dbo].[lectores] ([id_lec], [nombre_lec], [domicilio_lec], [provincia_lec
 SET IDENTITY_INSERT [dbo].[lectores] OFF
 SET IDENTITY_INSERT [dbo].[libros] ON 
 
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (1, N'El camino                                         ', N'Miguel Delibes                                    ', 1, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (2, N'Las Ratas                                         ', N'Miguel Delibes                                    ', 2, N'S                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (3, N'El Quijote                                        ', N'Miguel de Cervantes                               ', 3, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (4, N'Poemas de Castilla                                ', N'Antonio Machado                                   ', 4, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (5, N'El Buscón                                         ', N'Francisco de Quevedo                              ', 2, N'S                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (6, N'La Celestina                                      ', N'Fernando de Rojas                                 ', 2, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (7, N'Queda la Noche                                    ', N'Soledad Puértolas                                 ', 4, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (8, N'La flor de mi secreteo                            ', N'Antonio Gala                                      ', 2, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (9, N'El Castillo                                       ', N'Franz Kafka                                       ', 1, N'S                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (10, N'La vida es sueño                                  ', N'Calderón de la Barca                              ', 1, N'S                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (11, N'Campos de Castilla                                ', N'Antonio Machado                                   ', 1, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (12, N'La familia de Pascual Duarte                      ', N'Camilo José Cela                                  ', 2, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (13, N'Cinco horas con Mario                             ', N'Miguel Delibes                                    ', 4, N'S                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (14, N'La hoja roja                                      ', N'Miguel Delibes                                    ', 4, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (15, N'Todos los cuentos                                 ', N'Edgar Allan Poe                                   ', 3, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (16, N'Cuentos                                           ', N'Julio Cortazar                                    ', 3, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (17, N'El mar y las campanas                             ', N'Pablo Neruda                                      ', 2, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (18, N'Odas Elementales                                  ', N'Pablo Neruda                                      ', 4, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (19, N'Siete cuentos góticos                             ', N'Isak Deniessen                                    ', 2, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (20, N'El extranjero                                     ', N'Albert Camus                                      ', 2, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (21, N'El criticón                                       ', N'Baltasar Gracián                                  ', 1, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (22, N'Don Juan Tenorio                                  ', N'José Zorrilla                                     ', 2, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (23, N'Don Julián                                        ', N'Juan Goytisolo                                    ', 3, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (24, N'Los tres mosqueteros                              ', N'Añexandre Dumas                                   ', 4, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (25, N'Vivir para contarla                               ', N'Gabriel García Marquez                            ', 2, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (26, N'El paraiso en la otra esquina                     ', N'Mario Vargas Llosa                                ', 2, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (27, N'Veinte años y un día                              ', N'Jorge Sremprún                                    ', 3, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (28, N'El libro de las ilusiones                         ', N'Paul Auster                                       ', 2, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (29, N'Corazón tan blanco                                ', N'Javier Marías                                     ', 1, N'N                                                 ')
-INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (30, N'Artificios                                        ', N'Jorge Luis Borges                                 ', 1, N'N                                                 ')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (1, N'El camino                                         ', N'Miguel Delibes                                    ', 1, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (2, N'Las Ratas                                         ', N'Miguel Delibes                                    ', 2, N'S')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (3, N'El Quijote                                        ', N'Miguel de Cervantes                               ', 3, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (4, N'Poemas de Castilla                                ', N'Antonio Machado                                   ', 4, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (5, N'El Buscón                                         ', N'Francisco de Quevedo                              ', 2, N'S')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (6, N'La Celestina                                      ', N'Fernando de Rojas                                 ', 2, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (7, N'Queda la Noche                                    ', N'Soledad Puértolas                                 ', 4, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (8, N'La flor de mi secreteo                            ', N'Antonio Gala                                      ', 2, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (9, N'El Castillo                                       ', N'Franz Kafka                                       ', 1, N'S')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (10, N'La vida es sueño                                 ', N'Calderón de la Barca                              ', 1, N'S')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (11, N'Campos de Castilla                                ', N'Antonio Machado                                   ', 1, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (12, N'La familia de Pascual Duarte                      ', N'Camilo José Cela                                  ', 3, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (13, N'Cinco horas con Mario                             ', N'Miguel Delibes                                    ', 4, N'S')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (14, N'La hoja roja                                      ', N'Miguel Delibes                                    ', 4, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (15, N'Todos los cuentos                                 ', N'Edgar Allan Poe                                   ', 3, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (16, N'Cuentos                                           ', N'Julio Cortazar                                    ', 3, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (17, N'El mar y las campanas                             ', N'Pablo Neruda                                      ', 2, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (18, N'Odas Elementales                                  ', N'Pablo Neruda                                      ', 4, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (19, N'Siete cuentos góticos                             ', N'Isak Deniessen                                    ', 2, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (20, N'El extranjero                                     ', N'Albert Camus                                      ', 2, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (21, N'El criticón                                       ', N'Baltasar Gracián                                  ', 1, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (22, N'Don Juan Tenorio                                  ', N'José Zorrilla                                     ', 2, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (23, N'Don Julián                                        ', N'Juan Goytisolo                                    ', 3, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (24, N'Los tres mosqueteros                              ', N'Añexandre Dumas                                   ', 4, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (25, N'Vivir para contarla                               ', N'Gabriel García Marquez                            ', 2, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (26, N'El paraiso en la otra esquina                     ', N'Mario Vargas Llosa                                ', 2, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (27, N'Veinte años y un día                              ', N'Jorge Sremprún                                    ', 3, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (28, N'El libro de las ilusiones                         ', N'Paul Auster                                       ', 2, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (29, N'Corazón tan blanco                                ', N'Javier Marías                                     ', 1, N'N')
+INSERT [dbo].[libros] ([id_lib], [titulo_lib], [autor_lib], [seccion_lib], [prestado_sn_lib]) VALUES (30, N'Artificios                                        ', N'Jorge Luis Borges                                 ', 1, N'N')
 SET IDENTITY_INSERT [dbo].[libros] OFF
 INSERT [dbo].[prestamos] ([id_lec_pre], [id_lib_pre], [fecha_presta_pre], [fecha_devol_pre]) VALUES (1, 2, CAST(N'2019-02-01T13:20:00.000' AS DateTime), CAST(N'2019-02-16T13:20:00.000' AS DateTime))
 INSERT [dbo].[prestamos] ([id_lec_pre], [id_lib_pre], [fecha_presta_pre], [fecha_devol_pre]) VALUES (4, 5, CAST(N'2019-01-03T12:00:00.000' AS DateTime), CAST(N'2019-01-18T12:00:00.000' AS DateTime))
