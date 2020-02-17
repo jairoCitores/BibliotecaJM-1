@@ -145,6 +145,7 @@
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.IsMdiContainer = true;
             this.Name = "FM_Principal";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BibliotecaJM";
             this.Load += new System.EventHandler(this.FM_Principal_Load);
             this.toolStrip1.ResumeLayout(false);

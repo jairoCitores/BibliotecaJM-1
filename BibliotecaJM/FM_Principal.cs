@@ -20,47 +20,93 @@ namespace BibliotecaJM
 
         private void FM_Principal_Load(object sender, EventArgs e)
         {
-            usuarioActual.Nombre = "admin";
-            usuarioActual.TipoUsuario = "A";
+            FM_Login login = new FM_Login();
+            login.ShowDialog();
+            if(!login.correcto)
+            {
+                this.Close();
+            }
+            usuarioActual.Nombre = login.usuario;
+            usuarioActual.TipoUsuario = login.tipo;
         }
+        
         private void tsbLectores_Click(object sender, EventArgs e)
         {
-            VisualizarFormularioYTítulo(new FM_Lectores(usuarioActual),"Mantenimiento lectores");
+            if (usuarioActual.TipoUsuario == "A" || usuarioActual.TipoUsuario == "O")
+            {
+                VisualizarFormularioYTítulo(new FM_Lectores(), "Mantenimiento lectores");
+            }
+            else 
+            {
+                MessageBox.Show("Acceso denegado");
+            }
         }
-
         private void tsbLibros_Click(object sender, EventArgs e)
         {
-            VisualizarFormularioYTítulo(new FM_Libros(usuarioActual), "Mantenimiento libros");
-        }
+            if (usuarioActual.TipoUsuario == "A" || usuarioActual.TipoUsuario == "O")
+            {
+                VisualizarFormularioYTítulo(new FM_Libros(), "Mantenimiento libros");
+            }
+            else
+            {
+                MessageBox.Show("Acceso denegado");
+            }
 
+
+        }
         private void tsbPréstamos_Click(object sender, EventArgs e)
         {
-            VisualizarFormularioYTítulo(new FM_Prestamos(usuarioActual), "Préstamos");
+            if (usuarioActual.TipoUsuario == "A" || usuarioActual.TipoUsuario == "O")
+            {
+                VisualizarFormularioYTítulo(new FM_Prestamos(), "Préstamos");
+            }
+            else
+            {
+                MessageBox.Show("Acceso denegado");
+            }
         }
-
         private void tsbDevoluciones_Click(object sender, EventArgs e)
         {
-            VisualizarFormularioYTítulo(new FM_Devoluciones(usuarioActual), "Devoluciones");
+            if (usuarioActual.TipoUsuario == "A" || usuarioActual.TipoUsuario == "O")
+            {
+                VisualizarFormularioYTítulo(new FM_Devoluciones(), "Devoluciones");
+            }
+            else
+            {
+                MessageBox.Show("Acceso denegado");
+            }
         }
-
         private void tsbListados_Click(object sender, EventArgs e)
         {
-            VisualizarFormularioYTítulo(new FM_Listados(usuarioActual), "Listados");
+            if (usuarioActual.TipoUsuario == "A" || usuarioActual.TipoUsuario == "O")
+            {
+                VisualizarFormularioYTítulo(new FM_Listados(usuarioActual), "Listados");
+            }
+            else
+            {
+                MessageBox.Show("Acceso denegado");
+            }
         }
-
         private void tsbGráficos_Click(object sender, EventArgs e)
         {
             VisualizarFormularioYTítulo(new FM_Graficos(usuarioActual), "Gráficos");
         }
-
         private void tsbConfiguración_Click(object sender, EventArgs e)
         {
-            VisualizarFormularioYTítulo(new FM_Configuracion(usuarioActual), "Configuración");
+            if (usuarioActual.TipoUsuario == "A")
+            {
+                VisualizarFormularioYTítulo(new FM_Configuracion(), "Configuración");
+            }
+            else
+            {
+                MessageBox.Show("Acceso denegado");
+            }
         }
         private void VisualizarFormularioYTítulo(Form formulario, string título)
         {
             if (MdiChildren.Count() == 1)
                 MdiChildren[0].Close();
+
             formulario.MdiParent = this;
             formulario.Dock = DockStyle.Fill;
             formulario.Show();
